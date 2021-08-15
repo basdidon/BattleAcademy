@@ -20,28 +20,40 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        controls.Enable();
+        controls.PlayerAction.Enable();
     }
 
     private void OnDisable()
     {
-        controls.Disable();
+        controls.PlayerAction.Disable();
     }
 
     private void Start()
     {
         controls.PlayerAction.leftMosuseClick.performed += _ => ShowInfo();
-        controls.PlayerAction.RightMouseClick.performed += _ => Move();
+        controls.PlayerAction.RightMouseClick.performed += _ => Action();
     }
 
-    private void Move()
+    private void Action()
     {
-        animator.SetBool("IsMoving", true);
         RaycastHit hit;
         Vector3 screenPoint = controls.PlayerAction.mousePosition.ReadValue<Vector2>();
         Physics.Raycast(cam.ScreenPointToRay(screenPoint), out hit,20f);
         Debug.Log("onScreen : "+screenPoint+"   onWorld : "+hit.point);
         Debug.DrawRay(cam.ScreenToWorldPoint(screenPoint), cam.ScreenPointToRay(screenPoint).direction * 20, Color.red, 0.5f);
+
+        if (hit.transform.CompareTag("Enemy"))
+        {
+            //attackEnemy
+            //agent.stoppingDistance = 
+        }
+        else
+        {
+
+        }
+
+        animator.SetBool("IsMoving", true);
+
         agent.SetDestination(hit.point);
     }
 
